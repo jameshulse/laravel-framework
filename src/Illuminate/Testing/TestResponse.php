@@ -167,7 +167,21 @@ class TestResponse implements ArrayAccess
      */
     protected function statusMessageWithDetails($expected, $actual)
     {
-        return "Expected response status code [{$expected}] but received {$actual}.";
+        $baseMessage = "Expected response status code [{$expected}] but received {$actual}.";
+
+        if ($lastException = $this->exceptions->last()) {
+            $exceptionMessage = $lastException->getMessage();
+            $baseMessage = <<<EOF
+            $baseMessage
+
+            -------
+
+                $exceptionMessage
+
+            EOF;
+        }
+
+        return $baseMessage;
     }
 
     /**
